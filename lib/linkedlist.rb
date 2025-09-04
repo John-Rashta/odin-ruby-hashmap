@@ -12,7 +12,7 @@ class LinkedList
   def append(key, value)
     new_node = Node.new(key, value)
     unless @head
-      apply_all(new_node)
+      apply_all(new_node, 1)
       return
     end
     @tail.next_node = new_node
@@ -22,15 +22,8 @@ class LinkedList
 
   def delete(key)
     return unless @head
+    return if remove_head?(key)
 
-    if @head.key == key && @head == @tail
-      apply_all(nil, -1)
-      return
-    elsif @head.key == key
-      @head = @head.next_node
-      @size -= 1
-      return
-    end
     current_node, after_node = remove_iterator(@head, key)
 
     return if after_node.nil?
@@ -78,7 +71,7 @@ class LinkedList
   end
 
   def get_all(action)
-    return unless %w[key value both].include?("action")
+    return unless %w[key value both].include?(action)
 
     temp_arr = []
     current_node = @head
@@ -102,6 +95,19 @@ class LinkedList
   end
 
   private
+
+  def remove_head?(key)
+    if @head.key == key && @head == @tail
+      apply_all(nil, -1)
+      return true
+    elsif @head.key == key
+      @head = @head.next_node
+      @size -= 1
+      return true
+    end
+
+    false
+  end
 
   def remove_iterator(head, key)
     current_node = head
