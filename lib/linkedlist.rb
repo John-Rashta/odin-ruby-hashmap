@@ -38,9 +38,9 @@ class LinkedList
     if @tail == after_node
       current_node.next_node = nil
       @tail = current_node
+    else
+      current_node.next_node = after_node.next_node
     end
-
-    current_node.next_node = after_node.next_node
     @size -= 1
     nil
   end
